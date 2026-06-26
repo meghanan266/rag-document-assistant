@@ -1,17 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
+import { ChatLayout } from '@/components/chat/ChatLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { PublicRoute } from '@/components/PublicRoute'
+import { ChatEmptyPage } from '@/pages/chat/ChatEmptyPage'
+import { ChatThreadPage } from '@/pages/chat/ChatThreadPage'
 import { Login } from '@/pages/Login'
 import { SignUp } from '@/pages/SignUp'
-
-function ChatPlaceholder() {
-  return (
-    <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
-      Chat UI coming soon…
-    </div>
-  )
-}
 
 function App() {
   return (
@@ -35,13 +30,16 @@ function App() {
         />
         <Route path="/" element={<Navigate to="/chats" replace />} />
         <Route
-          path="/chats/*"
+          path="/chats"
           element={
             <ProtectedRoute>
-              <ChatPlaceholder />
+              <ChatLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<ChatEmptyPage />} />
+          <Route path=":threadId" element={<ChatThreadPage />} />
+        </Route>
         <Route path="*" element={<Navigate to="/chats" replace />} />
       </Routes>
     </BrowserRouter>
